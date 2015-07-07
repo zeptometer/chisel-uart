@@ -154,6 +154,9 @@ class BufferedUart(val wtime: Int, val entries: Int) extends Module {
 
 object Uart {
 
+  val wtime = 0x1458;
+  val entries = 128;
+
   def main(args: Array[String]): Unit = {
     chiselMainTest(args, () => Module(new UartLoopback)) { c =>
       new UartLoopbackTests(c)
@@ -161,6 +164,13 @@ object Uart {
     chiselMainTest(args, () => Module(new UartBufferedLoopback)) { c =>
       new UartBufferedLoopbackTests(c)
     }
+    chiselMainTest(args, () => Module(new BufferedUart(wtime, entries))) { c =>
+      new NullTest(c)
+    }
+  }
+
+  class NullTest (c: BufferedUart) extends Tester(c) {
+    ;
   }
 
   class UartLoopback extends Module {
